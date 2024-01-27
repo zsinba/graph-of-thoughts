@@ -7,7 +7,8 @@
         "max_tokens": 1536,
         "stop": null,
         "organization": "",
-        "api_key": ""
+        "api_key": "",
+        "base_url": ""
     },
     "chatgpt4" : {
         "model_id": "gpt-4",
@@ -17,7 +18,8 @@
         "max_tokens": 4096,
         "stop": null,
         "organization": "",
-        "api_key": ""
+        "api_key": "",
+        "base_url": "need  /v1  "
     },
     "llama7b-hf" : {
         "model_id": "Llama-2-7b-chat-hf",

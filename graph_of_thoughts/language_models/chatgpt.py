@@ -14,7 +14,21 @@ from typing import List, Dict, Union
 from openai import OpenAI, OpenAIError
 from openai.types.chat.chat_completion import ChatCompletion
 
+
+
 from .abstract_language_model import AbstractLanguageModel
+
+
+def show_partial_string(string):
+    length = len(string)
+    if length <= 10:
+        print(string)
+    else:
+        first = string[:5]
+        last = string[-5:]
+        middle = "*" * (length - 10)
+        return first + middle + last
+
 
 
 class ChatGPT(AbstractLanguageModel):
@@ -23,6 +37,7 @@ class ChatGPT(AbstractLanguageModel):
 
     Inherits from the AbstractLanguageModel and implements its abstract methods.
     """
+
 
     def __init__(
         self, config_path: str = "", model_name: str = "chatgpt", cache: bool = False
@@ -57,9 +72,13 @@ class ChatGPT(AbstractLanguageModel):
         self.api_key: str = os.getenv("OPENAI_API_KEY", self.config["api_key"])
         if self.api_key == "":
             raise ValueError("OPENAI_API_KEY is not set")
+        self.base_url: str = self.config["base_url"]
+        if self.base_url == "":
+            self.logger.warning("OPENAI_BASE_URL is not set")
+        # self.default_headers = {"x-foo": "true"}
         # Initialize the OpenAI Client
-        self.client = OpenAI(api_key=self.api_key, organization=self.organization)
-
+        print("###param: " + self.base_url + "," + show_partial_string(self.api_key))
+        self.client = OpenAI(base_url=self.base_url, api_key=self.api_key)
     def query(
         self, query: str, num_responses: int = 1
     ) -> Union[List[ChatCompletion], ChatCompletion]:
@@ -122,7 +141,7 @@ class ChatGPT(AbstractLanguageModel):
             n=num_responses,
             stop=self.stop,
         )
-
+        # print("response = ", response)
         self.prompt_tokens += response.usage.prompt_tokens
         self.completion_tokens += response.usage.completion_tokens
         prompt_tokens_k = float(self.prompt_tokens) / 1000.0

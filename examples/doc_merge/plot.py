@@ -160,7 +160,7 @@ def plot_results(
 
 
 plot_results(
-    get_plotting_data("results/"),
+    get_plotting_data("results/chatgpt_io-cot-tot-got-got2_2024-01-27_16-55-06/"),
     num_ndas=4,
     display_solved=False,
     model="GPT-3.5",
